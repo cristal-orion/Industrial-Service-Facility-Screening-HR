@@ -8,3 +8,6 @@ package-lock.json
 
 # Documenti interni cliente (non pubblicare)
 *.docx
+
+# Sorgenti immagini pesanti (il sito usa solo le .webp ottimizzate)
+public/images/*.png

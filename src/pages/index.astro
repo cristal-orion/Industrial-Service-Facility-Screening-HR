@@ -269,6 +269,10 @@ import Layout from '../layouts/Layout.astro';
         <p>Energia che costruisce valore, dal 2017.</p>
       </div>
       <div class="footer-right">
+        <a href="https://www.industrialservicefacility.it/privacy-policy/" target="_blank" rel="noopener" class="footer-link">
+          Privacy Policy
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+        </a>
         <a href="https://www.industrialservicefacility.it/" target="_blank" rel="noopener" class="footer-link">
           Sito principale
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
@@ -1170,8 +1174,15 @@ import Layout from '../layouts/Layout.astro';
     color: var(--color-gray-500);
     text-align: center;
     margin-top: 18px;
-    line-height: 1.55;
+    line-height: 1.7;
   }
+  .q-privacy-link {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-weight: 600;
+  }
+  .q-privacy-link:hover { opacity: 0.8; }
 
   /* ===== RESULT ===== */
   .result {
@@ -1262,6 +1273,13 @@ import Layout from '../layouts/Layout.astro';
   .footer-left p {
     font-size: 0.82rem;
     color: var(--color-gray-500);
+  }
+  .footer-right {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
   .footer-link {
     display: inline-flex;
@@ -1579,7 +1597,7 @@ import Layout from '../layouts/Layout.astro';
         Inizia il questionario
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
       </button>
-      <p class="q-privacy">Compilando il form acconsenti al trattamento dei tuoi dati per finalità di selezione. <br/>I dati verranno trattati nel rispetto del GDPR.</p>
+      <p class="q-privacy">Compilando il form acconsenti al trattamento dei tuoi dati per finalità di selezione, nel rispetto del GDPR. <br/><a href="https://www.industrialservicefacility.it/privacy-policy/" target="_blank" rel="noopener" class="q-privacy-link">Leggi la Privacy Policy</a></p>
     `;
     document.getElementById('qStart').addEventListener('click', handleContactSubmit);
   }

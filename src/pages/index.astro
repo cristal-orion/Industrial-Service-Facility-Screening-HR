@@ -80,8 +80,8 @@ import Layout from '../layouts/Layout.astro';
       </div>
       <div class="why-visual reveal reveal-delay-1">
         <img
-          src="/images/team-briefing-field.webp"
-          alt="Team tecnico durante un briefing operativo in campo"
+          src="/images/foto-reali/team-fiera.webp"
+          alt="Il team Industrial Service & Facility allo stand fieristico"
           class="why-visual-img"
           loading="lazy"
           decoding="async"
@@ -120,6 +120,54 @@ import Layout from '../layouts/Layout.astro';
           <h3>Contratto e stabilità</h3>
           <p>Offriamo contratti stabili con retribuzione competitiva e benefit concreti.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- I NOSTRI CANTIERI -->
+  <section class="gallery-section" id="cantieri">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">I nostri cantieri</span>
+        <h2>Dove lavorerai</h2>
+        <p class="section-desc">Eolico, fotovoltaico, impianti elettrici: ecco i contesti reali in cui operano le nostre squadre.</p>
+      </div>
+
+      <div class="gallery reveal reveal-delay-1">
+        <button class="gallery-nav gallery-nav-prev" type="button" aria-label="Foto precedente">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+
+        <div class="gallery-track" id="galleryTrack">
+          <figure class="gallery-slide">
+            <img src="/images/foto-reali/operatori-spalle.webp" alt="Operatori Industrial Service & Facility in cantiere" loading="lazy" decoding="async" />
+            <figcaption>Squadre operative sul campo</figcaption>
+          </figure>
+          <figure class="gallery-slide">
+            <img src="/images/foto-reali/eolico-tecnico.webp" alt="Tecnico in manutenzione su pala eolica" loading="lazy" decoding="async" />
+            <figcaption>Manutenzione eolica in quota</figcaption>
+          </figure>
+          <figure class="gallery-slide">
+            <img src="/images/foto-reali/eolico-panorama.webp" alt="Vista panoramica da una pala eolica" loading="lazy" decoding="async" />
+            <figcaption>Il punto di vista del tecnico eolico</figcaption>
+          </figure>
+          <figure class="gallery-slide">
+            <img src="/images/foto-reali/fotovoltaico.webp" alt="Impianto fotovoltaico Industrial Service & Facility" loading="lazy" decoding="async" />
+            <figcaption>Parchi fotovoltaici O&amp;M</figcaption>
+          </figure>
+          <figure class="gallery-slide">
+            <img src="/images/foto-reali/sede.webp" alt="Ingresso della sede Industrial Service & Facility" loading="lazy" decoding="async" />
+            <figcaption>La nostra sede</figcaption>
+          </figure>
+          <figure class="gallery-slide">
+            <img src="/images/foto-reali/stand-fiera.webp" alt="Stand Industrial Service & Facility in fiera" loading="lazy" decoding="async" />
+            <figcaption>Industrial Service &amp; Facility in fiera</figcaption>
+          </figure>
+        </div>
+
+        <button class="gallery-nav gallery-nav-next" type="button" aria-label="Foto successiva">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
       </div>
     </div>
   </section>
@@ -638,6 +686,93 @@ import Layout from '../layouts/Layout.astro';
     color: var(--color-gray-700);
     line-height: 1.6;
   }
+
+  /* ===== GALLERY ===== */
+  .gallery-section {
+    padding: 100px 0;
+    background: var(--color-white);
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+  .gallery {
+    position: relative;
+  }
+  .gallery-track {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding: 4px 4px 24px;
+    margin: 0 -4px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-gray-200) transparent;
+  }
+  .gallery-track::-webkit-scrollbar { height: 6px; }
+  .gallery-track::-webkit-scrollbar-track { background: transparent; }
+  .gallery-track::-webkit-scrollbar-thumb { background: var(--color-gray-200); border-radius: 10px; }
+  .gallery-slide {
+    flex: 0 0 calc((100% - 40px) / 3);
+    scroll-snap-align: center;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background: var(--color-gray-100);
+    border: 1px solid var(--color-gray-200);
+    margin: 0;
+    position: relative;
+    transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s var(--ease-out-expo);
+  }
+  .gallery-slide:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+  .gallery-slide img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+  }
+  .gallery-slide figcaption {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 18px 18px 16px;
+    color: var(--color-white);
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.7) 100%);
+    pointer-events: none;
+  }
+  .gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--color-gray-200);
+    background: var(--color-white);
+    color: var(--color-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    box-shadow: var(--shadow-md);
+    transition: all 0.2s ease;
+  }
+  .gallery-nav:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+  }
+  .gallery-nav:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .gallery-nav-prev { left: -22px; }
+  .gallery-nav-next { right: -22px; }
 
   /* ===== POSITIONS ===== */
   .positions-section {
@@ -1302,6 +1437,9 @@ import Layout from '../layouts/Layout.astro';
     .hero-photo {
       min-height: 360px;
     }
+    .gallery-slide { flex-basis: calc((100% - 20px) / 2); }
+    .gallery-nav-prev { left: 6px; }
+    .gallery-nav-next { right: 6px; }
   }
   @media (max-width: 900px) {
     .q-input-row { flex-direction: column !important; gap: 0 !important; }
@@ -1348,7 +1486,10 @@ import Layout from '../layouts/Layout.astro';
     }
     .benefits-grid { grid-template-columns: 1fr; }
     .profiles-grid { grid-template-columns: 1fr; }
-    .why-section, .positions-section { padding: 64px 0; }
+    .why-section, .positions-section, .gallery-section { padding: 64px 0; }
+    .gallery-slide { flex-basis: 86%; }
+    .gallery-slide img { aspect-ratio: 3 / 2; }
+    .gallery-nav { display: none; }
     .q-body { padding: 36px 22px 32px; min-height: 0; }
     .q-options--quiz { grid-template-columns: 1fr; gap: 10px; }
     .q-option--quiz { padding: 18px 18px; font-size: 0.95rem; }
@@ -1380,6 +1521,30 @@ import Layout from '../layouts/Layout.astro';
   window.addEventListener('scroll', () => {
     header.classList.toggle('scrolled', window.scrollY > 40);
   }, { passive: true });
+
+  // ===== GALLERY CAROUSEL =====
+  (() => {
+    const track = document.getElementById('galleryTrack');
+    if (!track) return;
+    const prev = document.querySelector('.gallery-nav-prev');
+    const next = document.querySelector('.gallery-nav-next');
+    const step = () => {
+      const slide = track.querySelector('.gallery-slide');
+      if (!slide) return 320;
+      const gap = parseFloat(getComputedStyle(track).gap) || 20;
+      return slide.getBoundingClientRect().width + gap;
+    };
+    const updateNav = () => {
+      const max = track.scrollWidth - track.clientWidth - 2;
+      if (prev) prev.disabled = track.scrollLeft <= 2;
+      if (next) next.disabled = track.scrollLeft >= max;
+    };
+    prev?.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next?.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+    track.addEventListener('scroll', updateNav, { passive: true });
+    window.addEventListener('resize', updateNav);
+    updateNav();
+  })();
 
   // ===== POSIZIONI =====
   const POSITIONS = {

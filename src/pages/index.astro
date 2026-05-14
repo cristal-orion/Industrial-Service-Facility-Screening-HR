@@ -16,7 +16,7 @@ import Layout from '../layouts/Layout.astro';
       </a>
       <nav class="header-nav">
         <a href="#perche-noi" class="nav-link">Perché noi</a>
-        <a href="#candidatura" class="nav-link">Posizioni aperte</a>
+        <a href="#candidatura" class="nav-link">Trova il tuo ruolo</a>
       </nav>
       <a href="#candidatura" class="header-cta">
         <span class="pulse-dot"></span>
@@ -139,30 +139,42 @@ import Layout from '../layouts/Layout.astro';
         </button>
 
         <div class="gallery-track" id="galleryTrack">
-          <figure class="gallery-slide">
-            <img src="/images/foto-reali/operatori-spalle.webp" alt="Operatori Industrial Service & Facility in cantiere" loading="lazy" decoding="async" />
-            <figcaption>Squadre operative sul campo</figcaption>
-          </figure>
-          <figure class="gallery-slide">
-            <img src="/images/foto-reali/eolico-tecnico.webp" alt="Tecnico in manutenzione su pala eolica" loading="lazy" decoding="async" />
-            <figcaption>Manutenzione eolica in quota</figcaption>
-          </figure>
-          <figure class="gallery-slide">
-            <img src="/images/foto-reali/eolico-panorama.webp" alt="Vista panoramica da una pala eolica" loading="lazy" decoding="async" />
-            <figcaption>Il punto di vista del tecnico eolico</figcaption>
-          </figure>
-          <figure class="gallery-slide">
-            <img src="/images/foto-reali/fotovoltaico.webp" alt="Impianto fotovoltaico Industrial Service & Facility" loading="lazy" decoding="async" />
-            <figcaption>Parchi fotovoltaici O&amp;M</figcaption>
-          </figure>
-          <figure class="gallery-slide">
-            <img src="/images/foto-reali/sede.webp" alt="Ingresso della sede Industrial Service & Facility" loading="lazy" decoding="async" />
-            <figcaption>La nostra sede</figcaption>
-          </figure>
-          <figure class="gallery-slide">
-            <img src="/images/foto-reali/stand-fiera.webp" alt="Stand Industrial Service & Facility in fiera" loading="lazy" decoding="async" />
-            <figcaption>Industrial Service &amp; Facility in fiera</figcaption>
-          </figure>
+          <div class="gallery-marquee">
+            <div class="gallery-set">
+              <figure class="gallery-slide">
+                <img src="/images/foto-reali/operatori-spalle.webp" alt="Operatori Industrial Service & Facility in cantiere" loading="lazy" decoding="async" />
+                <figcaption>Squadre operative sul campo</figcaption>
+              </figure>
+              <figure class="gallery-slide">
+                <img src="/images/foto-reali/eolico-tecnico.webp" alt="Tecnico in manutenzione su pala eolica" loading="lazy" decoding="async" />
+                <figcaption>Manutenzione eolica in quota</figcaption>
+              </figure>
+              <figure class="gallery-slide">
+                <img src="/images/foto-reali/eolico-panorama.webp" alt="Vista panoramica da una pala eolica" loading="lazy" decoding="async" />
+                <figcaption>Il punto di vista del tecnico eolico</figcaption>
+              </figure>
+              <figure class="gallery-slide">
+                <img src="/images/foto-reali/fotovoltaico.webp" alt="Impianto fotovoltaico Industrial Service & Facility" loading="lazy" decoding="async" />
+                <figcaption>Parchi fotovoltaici O&amp;M</figcaption>
+              </figure>
+              <figure class="gallery-slide">
+                <img src="/images/foto-reali/sede.webp" alt="Ingresso della sede Industrial Service & Facility" loading="lazy" decoding="async" />
+                <figcaption>La nostra sede</figcaption>
+              </figure>
+              <figure class="gallery-slide">
+                <img src="/images/foto-reali/stand-fiera.webp" alt="Stand Industrial Service & Facility in fiera" loading="lazy" decoding="async" />
+                <figcaption>Industrial Service &amp; Facility in fiera</figcaption>
+              </figure>
+            </div>
+            <div class="gallery-set" aria-hidden="true">
+              <figure class="gallery-slide"><img src="/images/foto-reali/operatori-spalle.webp" alt="" loading="lazy" decoding="async" /><figcaption>Squadre operative sul campo</figcaption></figure>
+              <figure class="gallery-slide"><img src="/images/foto-reali/eolico-tecnico.webp" alt="" loading="lazy" decoding="async" /><figcaption>Manutenzione eolica in quota</figcaption></figure>
+              <figure class="gallery-slide"><img src="/images/foto-reali/eolico-panorama.webp" alt="" loading="lazy" decoding="async" /><figcaption>Il punto di vista del tecnico eolico</figcaption></figure>
+              <figure class="gallery-slide"><img src="/images/foto-reali/fotovoltaico.webp" alt="" loading="lazy" decoding="async" /><figcaption>Parchi fotovoltaici O&amp;M</figcaption></figure>
+              <figure class="gallery-slide"><img src="/images/foto-reali/sede.webp" alt="" loading="lazy" decoding="async" /><figcaption>La nostra sede</figcaption></figure>
+              <figure class="gallery-slide"><img src="/images/foto-reali/stand-fiera.webp" alt="" loading="lazy" decoding="async" /><figcaption>Industrial Service &amp; Facility in fiera</figcaption></figure>
+            </div>
+          </div>
         </div>
 
         <button class="gallery-nav gallery-nav-next" type="button" aria-label="Foto successiva">
@@ -697,23 +709,30 @@ import Layout from '../layouts/Layout.astro';
     position: relative;
   }
   .gallery-track {
-    display: flex;
-    gap: 20px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
+    overflow: hidden;
     padding: 4px 4px 24px;
     margin: 0 -4px;
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-gray-200) transparent;
   }
-  .gallery-track::-webkit-scrollbar { height: 6px; }
-  .gallery-track::-webkit-scrollbar-track { background: transparent; }
-  .gallery-track::-webkit-scrollbar-thumb { background: var(--color-gray-200); border-radius: 10px; }
+  .gallery-marquee {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    animation: gallery-marquee 58s linear infinite;
+    will-change: transform;
+  }
+  .gallery-set {
+    display: flex;
+    gap: 20px;
+  }
+  @keyframes gallery-marquee {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(calc(-50% - 10px), 0, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-marquee { animation: none; }
+  }
   .gallery-slide {
-    flex: 0 0 calc((100% - 40px) / 3);
-    scroll-snap-align: center;
+    flex: 0 0 calc((min(100vw - 56px, 1084px) - 40px) / 3);
     border-radius: var(--radius-xl);
     overflow: hidden;
     background: var(--color-gray-100);
@@ -745,6 +764,7 @@ import Layout from '../layouts/Layout.astro';
     pointer-events: none;
   }
   .gallery-nav {
+    display: none;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -1437,7 +1457,7 @@ import Layout from '../layouts/Layout.astro';
     .hero-photo {
       min-height: 360px;
     }
-    .gallery-slide { flex-basis: calc((100% - 20px) / 2); }
+    .gallery-slide { flex-basis: calc((min(100vw - 56px, 968px) - 20px) / 2); }
     .gallery-nav-prev { left: 6px; }
     .gallery-nav-next { right: 6px; }
   }
@@ -1487,7 +1507,7 @@ import Layout from '../layouts/Layout.astro';
     .benefits-grid { grid-template-columns: 1fr; }
     .profiles-grid { grid-template-columns: 1fr; }
     .why-section, .positions-section, .gallery-section { padding: 64px 0; }
-    .gallery-slide { flex-basis: 86%; }
+    .gallery-slide { flex-basis: calc(86vw - 48px); }
     .gallery-slide img { aspect-ratio: 3 / 2; }
     .gallery-nav { display: none; }
     .q-body { padding: 36px 22px 32px; min-height: 0; }
@@ -1522,29 +1542,7 @@ import Layout from '../layouts/Layout.astro';
     header.classList.toggle('scrolled', window.scrollY > 40);
   }, { passive: true });
 
-  // ===== GALLERY CAROUSEL =====
-  (() => {
-    const track = document.getElementById('galleryTrack');
-    if (!track) return;
-    const prev = document.querySelector('.gallery-nav-prev');
-    const next = document.querySelector('.gallery-nav-next');
-    const step = () => {
-      const slide = track.querySelector('.gallery-slide');
-      if (!slide) return 320;
-      const gap = parseFloat(getComputedStyle(track).gap) || 20;
-      return slide.getBoundingClientRect().width + gap;
-    };
-    const updateNav = () => {
-      const max = track.scrollWidth - track.clientWidth - 2;
-      if (prev) prev.disabled = track.scrollLeft <= 2;
-      if (next) next.disabled = track.scrollLeft >= max;
-    };
-    prev?.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
-    next?.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
-    track.addEventListener('scroll', updateNav, { passive: true });
-    window.addEventListener('resize', updateNav);
-    updateNav();
-  })();
+  // La gallery scorre in modo lineare via CSS.
 
   // ===== POSIZIONI =====
   const POSITIONS = {

@@ -12,3 +12,4 @@ package-lock.json
 # Sorgenti immagini pesanti (il sito usa solo le .webp ottimizzate)
 public/images/*.png
 Fotodrive/
+Favicon.png

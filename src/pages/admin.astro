@@ -798,13 +798,30 @@ import Layout from '../layouts/Layout.astro';
   }
   .d-answer-row {
     display: grid;
-    grid-template-columns: 28px 1fr auto;
+    grid-template-columns: 28px 1fr auto auto;
     gap: 12px;
     padding: 12px 16px;
     border-bottom: 1px solid var(--color-gray-100);
     align-items: center;
     font-size: 0.85rem;
   }
+  .d-answer-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 9px;
+    border-radius: 100px;
+    background: var(--color-gray-50, #f4f6fa);
+    color: var(--color-gray-500);
+    font-size: 0.7rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .d-answer-time[data-speed="fast"] { background: rgba(217,119,6,0.10); color: #b45309; }
+  .d-answer-time[data-speed="slow"] { background: rgba(2,132,199,0.10);  color: #0369a1; }
+  .d-answer-time[data-speed="na"]   { background: rgba(100,116,139,0.08); color: #94a3b8; }
+  .d-answer-time svg { width: 11px; height: 11px; }
   .d-answer-row:last-child { border-bottom: none; }
   .d-answer-num {
     font-family: var(--font-display);
@@ -854,6 +871,8 @@ import Layout from '../layouts/Layout.astro';
     .d-contact-grid { grid-template-columns: 1fr; }
     .d-charts { grid-template-columns: 1fr; }
     .d-bar-row { grid-template-columns: 110px 1fr 32px; font-size: 0.78rem; }
+    .d-answer-row { grid-template-columns: 24px 1fr; row-gap: 6px; }
+    .d-answer-time, .d-answer-flag { grid-column: 2; justify-self: start; }
     .admin-kpis { gap: 14px; }
     .kpi-num { font-size: 1.2rem; }
     .kpi-label { font-size: 0.62rem; }
@@ -864,7 +883,7 @@ import Layout from '../layouts/Layout.astro';
   // ============================================================
   // CONFIG
   // ============================================================
-  const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxDOYJP9gd5iGmn14cPBKsZSuxGlA8zJAz3Bs4qx_rZwZYgZ-YhnlW-rFn0smyEdCcReg/exec';
+  const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbw2I_65J1FG2jiI6kU9xEU2arMv-CcFXA-inAyc5upcUAZ4oZNBAa05bYxfxxUFhC6rTg/exec';
   const STORAGE_KEY = 'isf_admin_token';
 
   // ============================================================
@@ -927,6 +946,26 @@ import Layout from '../layouts/Layout.astro';
     if (value === 'incerto') return 50;
     if (value === 'na') return 25;
     return q.critical === value ? 0 : 20;
+  }
+
+  function formatTime(ms) {
+    if (ms == null || !isFinite(ms) || ms < 0) return null;
+    if (ms < 1000) return `${ms} ms`;
+    const s = ms / 1000;
+    if (s < 10) return `${s.toFixed(1)} s`;
+    if (s < 60) return `${Math.round(s)} s`;
+    const m = Math.floor(s / 60);
+    const rem = Math.round(s - m * 60);
+    return `${m}m ${rem}s`;
+  }
+
+  // 'fast' < 2s (sospetto risposta tirata via), 'slow' > 20s (rifletteva),
+  // altrimenti normale; null se mancante (vecchie candidature)
+  function timeSpeed(ms) {
+    if (ms == null) return 'na';
+    if (ms < 2000) return 'fast';
+    if (ms > 20000) return 'slow';
+    return 'normal';
   }
 
   function answerFlag(q, value) {
@@ -1454,11 +1493,18 @@ import Layout from '../layouts/Layout.astro';
 
     const radar = renderRadarSVG(c.dims);
 
+    const clockSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
     const answersHtml = QUESTIONS.map(q => {
       const a = c.answers.find(x => x.questionId === q.id);
       const val = a ? a.value : null;
       const flag = a ? answerFlag(q, val) : 'na';
       const flagLabel = { ok: 'Ideale', warn: 'Da approfondire', crit: 'Critica', na: 'N/D' }[flag];
+      const tMs = a ? a.timeMs : null;
+      const tLabel = formatTime(tMs);
+      const tSpeed = timeSpeed(tMs);
+      const timeHtml = tLabel
+        ? `<span class="d-answer-time" data-speed="${tSpeed}" title="Tempo di risposta">${clockSvg}${tLabel}</span>`
+        : `<span class="d-answer-time" data-speed="na" title="Tempo non disponibile">${clockSvg}—</span>`;
       return `
         <div class="d-answer-row">
           <div class="d-answer-num">Q${q.id}</div>
@@ -1466,6 +1512,7 @@ import Layout from '../layouts/Layout.astro';
             ${q.text}
             <small>${DIM_LABELS[q.dim]}</small>
           </div>
+          ${timeHtml}
           <span class="d-answer-flag" data-flag="${flag}">${answerLabel(val)} · ${flagLabel}</span>
         </div>
       `;

@@ -338,6 +338,46 @@ import Layout from '../layouts/Layout.astro';
             <span class="score-text" id="scoreText"></span>
           </div>
           <button class="btn btn-primary" id="resultBtn" style="display:none;"></button>
+
+          <div class="result-invite" id="resultInvite" style="display:none;">
+            <div class="result-invite-divider"></div>
+            <p class="result-invite-title">Conosci qualcuno che potrebbe essere interessato?</p>
+            <div class="invite-share-row">
+              <input class="invite-url" id="resultInviteUrl" readonly />
+              <button class="btn btn-primary invite-copy-btn" data-target="resultInviteUrl" data-status="resultInviteStatus" type="button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copia link
+              </button>
+            </div>
+            <p class="invite-status" id="resultInviteStatus"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INVITA UN AMICO -->
+  <section class="invite-section" id="invita-amico">
+    <div class="container">
+      <div class="invite-card">
+        <div class="invite-card-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+        </div>
+        <div class="invite-card-body">
+          <h2 class="invite-title">Conosci qualcuno che potrebbe essere interessato?</h2>
+          <p class="invite-desc">Aiutaci a far crescere il team. Copia il link qui sotto e inviallo a chi pensi possa fare al caso nostro: le posizioni aperte sono visibili a tutti.</p>
+          <div class="invite-share-row">
+            <input class="invite-url" id="inviteUrl" readonly />
+            <button class="btn btn-primary invite-copy-btn" id="inviteCopyBtn" data-target="inviteUrl" data-status="inviteStatus" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copia link
+            </button>
+            <button class="btn btn-secondary invite-share-btn" id="inviteShareBtn" data-target="inviteUrl" type="button" style="display:none;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+              Condividi
+            </button>
+          </div>
+          <p class="invite-status" id="inviteStatus"></p>
         </div>
       </div>
     </div>
@@ -1364,6 +1404,69 @@ import Layout from '../layouts/Layout.astro';
     font-weight: 600;
   }
   .q-privacy-link:hover { opacity: 0.8; }
+  .q-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    margin-top: 6px;
+    border: 1.5px solid var(--color-gray-200, #d8dee6);
+    border-radius: 12px;
+    background: var(--color-gray-50, #f7f9fb);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--color-gray-700, #475263);
+  }
+  .q-consent:hover { border-color: var(--color-primary); }
+  .q-consent.checked {
+    border-color: var(--color-primary);
+    background: rgba(13,158,113,0.06);
+  }
+  .q-consent input[type="checkbox"] {
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    border: 2px solid var(--color-gray-300, #c4cdda);
+    border-radius: 6px;
+    background: var(--color-white);
+    cursor: pointer;
+    position: relative;
+    margin-top: 1px;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .q-consent input[type="checkbox"]:checked {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+  .q-consent input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 6px; top: 2px;
+    width: 5px; height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .q-consent-text strong { color: var(--color-dark); font-weight: 600; }
+  .q-consent-error {
+    color: #b91c1c;
+    background: rgba(220,38,38,0.08);
+    border: 1px solid rgba(220,38,38,0.2);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    margin-top: 12px;
+    display: none;
+  }
+  .q-consent-error.visible { display: block; }
+  .q-submit[disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 
   /* ===== RESULT ===== */
   .result {
@@ -1433,6 +1536,117 @@ import Layout from '../layouts/Layout.astro';
     font-size: 0.8rem;
     color: var(--color-gray-500);
     font-weight: 500;
+  }
+
+  /* ===== INVITE FRIEND ===== */
+  .invite-section {
+    padding: 60px 0 80px;
+    background: var(--color-white);
+  }
+  .invite-card {
+    max-width: 760px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, var(--color-primary-bg, rgba(13,158,113,0.08)) 0%, rgba(13,158,113,0.02) 100%);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-2xl);
+    padding: 36px 38px;
+    display: flex;
+    gap: 22px;
+    align-items: flex-start;
+    box-shadow: var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.04));
+  }
+  .invite-card-icon {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: var(--color-primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .invite-card-body { flex: 1; min-width: 0; }
+  .invite-title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    margin: 0 0 8px;
+    line-height: 1.3;
+  }
+  .invite-desc {
+    font-size: 0.92rem;
+    color: var(--color-gray-700);
+    line-height: 1.6;
+    margin: 0 0 20px;
+  }
+  .invite-share-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+  .invite-url {
+    flex: 1;
+    min-width: 200px;
+    padding: 12px 16px;
+    border: 1.5px solid var(--color-gray-200);
+    border-radius: 10px;
+    background: var(--color-white);
+    color: var(--color-gray-700);
+    font-size: 0.88rem;
+    font-family: var(--font-body, inherit);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .invite-url:focus { outline: none; border-color: var(--color-primary); }
+  .invite-copy-btn, .invite-share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    white-space: nowrap;
+  }
+  .invite-copy-btn.copied {
+    background: #15803d;
+  }
+  .invite-status {
+    font-size: 0.8rem;
+    color: var(--color-primary);
+    margin: 10px 0 0;
+    min-height: 18px;
+    font-weight: 600;
+  }
+
+  /* invite block dentro la result screen */
+  .result-invite {
+    margin-top: 18px;
+    text-align: left;
+  }
+  .result-invite-divider {
+    height: 1px;
+    background: var(--color-gray-200);
+    margin: 28px 0 22px;
+  }
+  .result-invite-title {
+    font-size: 0.92rem !important;
+    color: var(--color-dark) !important;
+    font-weight: 600;
+    margin-bottom: 14px !important;
+    text-align: center;
+  }
+  .result-invite .invite-share-row { justify-content: center; }
+  .result-invite .invite-url { font-size: 0.82rem; padding: 10px 14px; }
+  .result-invite .invite-copy-btn { padding: 10px 16px; font-size: 0.88rem; }
+  .result-invite .invite-status { text-align: center; }
+
+  @media (max-width: 640px) {
+    .invite-card { flex-direction: column; padding: 28px 22px; gap: 16px; }
+    .invite-card-icon { width: 48px; height: 48px; }
+    .invite-share-row { flex-direction: column; }
+    .invite-url { min-width: 0; width: 100%; }
+    .invite-copy-btn, .invite-share-btn { width: 100%; justify-content: center; }
   }
 
   /* ===== FOOTER ===== */
@@ -1614,7 +1828,7 @@ import Layout from '../layouts/Layout.astro';
   ];
 
   // Endpoint webhook Apps Script
-  const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxDOYJP9gd5iGmn14cPBKsZSuxGlA8zJAz3Bs4qx_rZwZYgZ-YhnlW-rFn0smyEdCcReg/exec';
+  const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbw2I_65J1FG2jiI6kU9xEU2arMv-CcFXA-inAyc5upcUAZ4oZNBAa05bYxfxxUFhC6rTg/exec';
 
   // ===== STATE =====
   // step -1 = intro, step 0 = contact, step 1..16 = domanda (1-based)
@@ -1622,6 +1836,7 @@ import Layout from '../layouts/Layout.astro';
   let currentStep = -1;
   let contact = { nome: '', cognome: '', email: '', telefono: '', citta: '' };
   let answers = new Array(QUESTIONS.length).fill(null);
+  let questionStartTime = 0;
 
   const TOTAL_STEPS = QUESTIONS.length + 1; // contatti + 16 domande
 
@@ -1783,13 +1998,38 @@ import Layout from '../layouts/Layout.astro';
         <label for="qPosizione">Posizione di interesse *</label>
         <select id="qPosizione" class="q-input">${positionOptions}</select>
       </div>
-      <button class="btn btn-primary q-submit" id="qStart" style="width:100%;justify-content:center;">
+
+      <label class="q-consent" id="qConsentBox">
+        <input type="checkbox" id="qPrivacy" />
+        <span class="q-consent-text">
+          <strong>Accetto la Privacy Policy</strong> e acconsento al trattamento dei miei dati personali per finalità di selezione del personale, ai sensi del GDPR (Reg. UE 2016/679). <a href="https://www.industrialservicefacility.it/privacy-policy/" target="_blank" rel="noopener" class="q-privacy-link">Leggi l'informativa completa</a>.
+        </span>
+      </label>
+
+      <div class="q-consent-error" id="qContactError"></div>
+
+      <button class="btn btn-primary q-submit" id="qStart" style="width:100%;justify-content:center;margin-top:16px;">
         Inizia il questionario
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
       </button>
-      <p class="q-privacy">Compilando il form acconsenti al trattamento dei tuoi dati per finalità di selezione, nel rispetto del GDPR. <br/><a href="https://www.industrialservicefacility.it/privacy-policy/" target="_blank" rel="noopener" class="q-privacy-link">Leggi la Privacy Policy</a></p>
     `;
+    const consentBox = document.getElementById('qConsentBox');
+    const privacyCb = document.getElementById('qPrivacy');
+    privacyCb.addEventListener('change', () => {
+      consentBox.classList.toggle('checked', privacyCb.checked);
+    });
     document.getElementById('qStart').addEventListener('click', handleContactSubmit);
+  }
+
+  function showContactError(msg) {
+    const el = document.getElementById('qContactError');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('visible');
+  }
+  function clearContactError() {
+    const el = document.getElementById('qContactError');
+    if (el) el.classList.remove('visible');
   }
 
   function renderQuestionStep(qIndex) {
@@ -1818,24 +2058,48 @@ import Layout from '../layouts/Layout.astro';
       btn.addEventListener('click', () => handleAnswer(qIndex, opt.value, i));
       qOptions.appendChild(btn);
     });
+
+    questionStartTime = performance.now();
   }
 
-  function handleContactSubmit() {
+  async function handleContactSubmit() {
+    clearContactError();
     const nome = document.getElementById('qNome').value.trim();
     const cognome = document.getElementById('qCognome').value.trim();
     const email = document.getElementById('qEmail').value.trim();
     const telefono = document.getElementById('qTelefono').value.trim();
     const citta = document.getElementById('qCitta').value.trim();
     const posizione = document.getElementById('qPosizione').value;
+    const privacyAccepted = document.getElementById('qPrivacy').checked;
 
     if (!nome || !cognome || !email || !telefono || !citta) {
-      alert('Compila tutti i campi obbligatori.');
+      showContactError('Compila tutti i campi obbligatori.');
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      alert('Inserisci un indirizzo email valido.');
+      showContactError('Inserisci un indirizzo email valido.');
       return;
     }
+    if (!privacyAccepted) {
+      showContactError('Per procedere devi accettare la Privacy Policy.');
+      return;
+    }
+
+    const btn = document.getElementById('qStart');
+    const originalHTML = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = 'Verifica in corso…';
+
+    try {
+      const dup = await checkDuplicate(email, telefono);
+      if (dup === 'exists') {
+        showContactError('Risulta già una candidatura con questa email o numero di telefono. Il questionario può essere svolto una sola volta. Per modifiche scrivici a HR.');
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+        return;
+      }
+      // Se il check fallisce per rete, lasciamo procedere — il submit finale ha comunque dedup
+    } catch (_) { /* ignora, dedup garantito al submit */ }
 
     contact = { nome, cognome, email, telefono, citta };
     selectedPosition = posizione;
@@ -1845,12 +2109,26 @@ import Layout from '../layouts/Layout.astro';
     renderStep();
   }
 
+  async function checkDuplicate(email, telefono) {
+    if (!WEBHOOK_URL) return 'unknown';
+    const res = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'check_duplicate', email, telefono })
+    });
+    if (!res.ok) throw new Error('check_duplicate http ' + res.status);
+    const data = await res.json();
+    if (data && data.ok && data.exists) return 'exists';
+    return 'ok';
+  }
+
   function handleAnswer(qIndex, value, optionIdx) {
     const opts = qOptions.querySelectorAll('.q-option');
     opts.forEach(o => o.classList.remove('selected'));
     opts[optionIdx].classList.add('selected');
 
-    answers[qIndex] = { questionId: QUESTIONS[qIndex].id, value };
+    const timeMs = questionStartTime ? Math.round(performance.now() - questionStartTime) : null;
+    answers[qIndex] = { questionId: QUESTIONS[qIndex].id, value, timeMs };
 
     setTimeout(() => {
       if (qIndex + 1 < QUESTIONS.length) {
@@ -1867,7 +2145,7 @@ import Layout from '../layouts/Layout.astro';
       posizione: POSITIONS[selectedPosition] || selectedPosition,
       posizioneKey: selectedPosition,
       contatto: contact,
-      risposte: answers.map(a => a || { questionId: null, value: null }),
+      risposte: answers.map(a => a || { questionId: null, value: null, timeMs: null }),
       timestamp: new Date().toISOString(),
       userAgent: navigator.userAgent
     };
@@ -1875,7 +2153,7 @@ import Layout from '../layouts/Layout.astro';
     // Log temporaneo finché non c'è il webhook configurato
     console.log('Candidatura payload:', payload);
 
-    let ok = true;
+    let outcome = 'ok';
     if (WEBHOOK_URL) {
       try {
         const res = await fetch(WEBHOOK_URL, {
@@ -1883,38 +2161,64 @@ import Layout from '../layouts/Layout.astro';
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(payload)
         });
-        ok = res.ok;
+        if (!res.ok) {
+          outcome = 'error';
+        } else {
+          const data = await res.json().catch(() => ({}));
+          if (data && data.ok === false && data.error === 'already_submitted') outcome = 'duplicate';
+          else if (data && data.ok === false) outcome = 'error';
+        }
       } catch (err) {
         console.error('Errore invio candidatura:', err);
-        ok = false;
+        outcome = 'error';
       }
     }
 
-    showThankYou(ok);
+    showThankYou(outcome);
   }
 
-  function showThankYou(success) {
+  function showThankYou(outcome) {
+    // Compat: accetta vecchia firma boolean
+    if (outcome === true)  outcome = 'ok';
+    if (outcome === false) outcome = 'error';
+
     questionnaire.style.display = 'none';
     resultScreen.style.display = 'block';
 
     const icon = document.getElementById('resultIcon');
-    icon.className = `result-icon ${success ? 'success' : 'warning'}`;
-    if (success) {
+    const title = document.getElementById('resultTitle');
+    const message = document.getElementById('resultMessage');
+    const btn = document.getElementById('resultBtn');
+    const invite = document.getElementById('resultInvite');
+
+    if (outcome === 'ok') {
+      icon.className = 'result-icon success';
       icon.innerHTML = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
-      document.getElementById('resultTitle').textContent = 'Grazie, abbiamo ricevuto la tua candidatura';
-      document.getElementById('resultMessage').textContent = 'Il nostro team HR valuterà il tuo profilo nei prossimi giorni. Se sarà in linea con le nostre ricerche, ti contatteremo per i passi successivi.';
-    } else {
+      title.textContent = 'Grazie, abbiamo ricevuto la tua candidatura';
+      message.textContent = 'Il nostro team HR valuterà il tuo profilo nei prossimi giorni. Se sarà in linea con le nostre ricerche, ti contatteremo per i passi successivi.';
+      btn.textContent = 'Torna alla home';
+      btn.onclick = resetAll;
+      if (invite) invite.style.display = 'block';
+    } else if (outcome === 'duplicate') {
+      icon.className = 'result-icon warning';
       icon.innerHTML = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
-      document.getElementById('resultTitle').textContent = 'Qualcosa è andato storto';
-      document.getElementById('resultMessage').textContent = 'Non siamo riusciti a inviare la candidatura. Riprova tra qualche minuto oppure scrivici via email.';
+      title.textContent = 'Hai già completato il questionario';
+      message.textContent = 'Risulta già una candidatura inviata con la tua email o il tuo numero di telefono. Il questionario può essere svolto una sola volta. Se hai bisogno di modificare i tuoi dati, contatta il nostro team HR.';
+      btn.textContent = 'Torna alla home';
+      btn.onclick = resetAll;
+      if (invite) invite.style.display = 'none';
+    } else {
+      icon.className = 'result-icon warning';
+      icon.innerHTML = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+      title.textContent = 'Qualcosa è andato storto';
+      message.textContent = 'Non siamo riusciti a inviare la candidatura. Riprova tra qualche minuto oppure scrivici via email.';
+      btn.textContent = 'Riprova';
+      btn.onclick = () => { resultScreen.style.display = 'none'; questionnaire.style.display = 'block'; };
+      if (invite) invite.style.display = 'none';
     }
 
     document.getElementById('resultScore').style.display = 'none';
-
-    const btn = document.getElementById('resultBtn');
     btn.style.display = 'inline-flex';
-    btn.textContent = success ? 'Torna alla home' : 'Riprova';
-    btn.onclick = success ? resetAll : () => { resultScreen.style.display = 'none'; questionnaire.style.display = 'block'; };
 
     resultScreen.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
@@ -1942,4 +2246,65 @@ import Layout from '../layouts/Layout.astro';
   function escapeAttr(s) {
     return String(s || '').replace(/"/g, '&quot;').replace(/</g, '&lt;');
   }
+
+  // ===== INVITA UN AMICO =====
+  (function setupInvite() {
+    const shareUrl = window.location.origin + window.location.pathname + '#candidatura';
+
+    // popola tutti gli input invite presenti
+    document.querySelectorAll('.invite-url').forEach(el => { el.value = shareUrl; });
+
+    // bottone "Condividi" mobile (Web Share API)
+    const shareBtn = document.getElementById('inviteShareBtn');
+    if (shareBtn && typeof navigator.share === 'function') {
+      shareBtn.style.display = 'inline-flex';
+      shareBtn.addEventListener('click', async () => {
+        try {
+          await navigator.share({
+            title: 'Industrial Service & Facility — posizioni aperte',
+            text: 'Sto guardando le posizioni aperte da Industrial Service & Facility, potrebbe interessarti:',
+            url: shareUrl
+          });
+        } catch (_) { /* utente ha annullato */ }
+      });
+    }
+
+    // bottoni "Copia link" (anche dentro la result screen)
+    document.querySelectorAll('.invite-copy-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const targetId = btn.dataset.target;
+        const statusId = btn.dataset.status;
+        const input = targetId ? document.getElementById(targetId) : null;
+        const status = statusId ? document.getElementById(statusId) : null;
+        const value = input ? input.value : shareUrl;
+        let ok = false;
+        try {
+          await navigator.clipboard.writeText(value);
+          ok = true;
+        } catch (_) {
+          // fallback: select + execCommand
+          try {
+            if (input) {
+              input.select();
+              input.setSelectionRange(0, 99999);
+              ok = document.execCommand('copy');
+            }
+          } catch (_) {}
+        }
+        if (status) {
+          status.textContent = ok ? '✓ Link copiato negli appunti' : 'Non riesco a copiare. Seleziona il link manualmente.';
+          if (ok) setTimeout(() => { status.textContent = ''; }, 2500);
+        }
+        if (ok) {
+          btn.classList.add('copied');
+          const original = btn.innerHTML;
+          btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Copiato';
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.innerHTML = original;
+          }, 2000);
+        }
+      });
+    });
+  })();
 </script>

@@ -22,11 +22,15 @@
  */
 
 const SHEET_NAME = 'Candidature';
+// Le colonne q*_time sono in coda per non disallineare le righe già scritte
+// prima dell'introduzione della metrica tempo (vecchie candidature compatibili).
 const HEADERS = [
   'timestamp','id','nome','cognome','email','telefono','citta','posizione',
   'q1','q2','q3','q4','q5','q6','q7','q8','q9','q10','q11','q12','q13','q14','q15','q16',
   'relazionale','mindset','organizzazione','flessibilita','fitSettore',
-  'potenziale','overall','categoria'
+  'potenziale','overall','categoria',
+  'q1_time','q2_time','q3_time','q4_time','q5_time','q6_time','q7_time','q8_time',
+  'q9_time','q10_time','q11_time','q12_time','q13_time','q14_time','q15_time','q16_time'
 ];
 
 // ============================================================
@@ -59,9 +63,10 @@ function doPost(e) {
     const body = JSON.parse(e.postData.contents);
     const action = body.action || 'submit';
 
-    if (action === 'submit')  return json(handleSubmit(body));
-    if (action === 'login')   return json(handleLogin(body));
-    if (action === 'list')    return json(handleList(body));
+    if (action === 'submit')          return json(handleSubmit(body));
+    if (action === 'login')           return json(handleLogin(body));
+    if (action === 'list')            return json(handleList(body));
+    if (action === 'check_duplicate') return json(handleCheckDuplicate(body));
 
     return json({ ok: false, error: 'unknown_action' });
   } catch (err) {
@@ -86,12 +91,20 @@ function json(obj) {
 function handleSubmit(payload) {
   const sheet = getSheet();
 
-  // Normalizza risposte: array di 16 valori (si|incerto|no|na|null)
+  // Dedup: stessa email o stesso telefono normalizzato → rifiuto
+  const c0 = payload.contatto || {};
+  if (isDuplicate(sheet, c0.email, c0.telefono)) {
+    return { ok: false, error: 'already_submitted' };
+  }
+
+  // Normalizza risposte: array di 16 valori (si|incerto|no|na|null) + 16 tempi in ms
   const answers = Array(16).fill(null);
+  const times = Array(16).fill('');
   if (Array.isArray(payload.risposte)) {
     for (const r of payload.risposte) {
       if (r && r.questionId >= 1 && r.questionId <= 16) {
         answers[r.questionId - 1] = sanitizeValue(r.value);
+        times[r.questionId - 1] = sanitizeTime(r.timeMs);
       }
     }
   }
@@ -111,7 +124,8 @@ function handleSubmit(payload) {
     s(payload.posizione || payload.posizioneKey),
     ...answers,
     dims.relazionale, dims.mindset, dims.organizzazione, dims.flessibilita, dims.fitSettore,
-    potenziale, overall, categoria
+    potenziale, overall, categoria,
+    ...times
   ];
 
   sheet.appendRow(row);
@@ -123,6 +137,13 @@ function s(v) { return v == null ? '' : String(v); }
 function sanitizeValue(v) {
   const ok = ['si', 'incerto', 'no', 'na'];
   return ok.indexOf(v) >= 0 ? v : null;
+}
+
+function sanitizeTime(v) {
+  const n = Number(v);
+  if (!isFinite(n) || n < 0) return '';
+  // hard cap a 30 minuti per evitare valori sballati da tab tenute aperte
+  return Math.min(Math.round(n), 30 * 60 * 1000);
 }
 
 // ============================================================
@@ -165,7 +186,13 @@ function handleList(payload) {
     // ricompone struttura amica per il client
     const answers = [];
     for (let i = 1; i <= 16; i++) {
-      answers.push({ questionId: i, value: obj['q' + i] || null });
+      const t = obj['q' + i + '_time'];
+      const timeMs = (t === '' || t == null) ? null : Number(t);
+      answers.push({
+        questionId: i,
+        value: obj['q' + i] || null,
+        timeMs: isFinite(timeMs) ? timeMs : null
+      });
     }
     return {
       id: obj.id,
@@ -188,6 +215,47 @@ function handleList(payload) {
   });
 
   return { ok: true, candidates };
+}
+
+// ============================================================
+// DEDUPLICA CANDIDATURE (email / telefono)
+// ============================================================
+function handleCheckDuplicate(payload) {
+  const sheet = getSheet();
+  const exists = isDuplicate(sheet, payload.email, payload.telefono);
+  return { ok: true, exists };
+}
+
+function isDuplicate(sheet, email, phone) {
+  const e = normalizeEmail(email);
+  const p = normalizePhone(phone);
+  if (!e && !p) return false;
+  const last = sheet.getLastRow();
+  if (last < 2) return false;
+  // colonne: A timestamp, B id, C nome, D cognome, E email, F telefono
+  const values = sheet.getRange(2, 5, last - 1, 2).getValues();
+  for (let i = 0; i < values.length; i++) {
+    const rowEmail = normalizeEmail(values[i][0]);
+    const rowPhone = normalizePhone(values[i][1]);
+    if (e && rowEmail && rowEmail === e) return true;
+    if (p && rowPhone && rowPhone === p) return true;
+  }
+  return false;
+}
+
+function normalizeEmail(v) {
+  if (v == null) return '';
+  return String(v).trim().toLowerCase();
+}
+
+function normalizePhone(v) {
+  if (v == null) return '';
+  // tieni solo cifre, poi normalizza prefisso internazionale italiano
+  let s = String(v).replace(/\D+/g, '');
+  if (s.startsWith('0039')) s = s.slice(2);   // 0039xxx → 39xxx
+  if (s.startsWith('39') && s.length >= 11) s = s.slice(2); // 39xxx → xxx
+  if (s.startsWith('0')) s = s.slice(1);
+  return s;
 }
 
 // ============================================================

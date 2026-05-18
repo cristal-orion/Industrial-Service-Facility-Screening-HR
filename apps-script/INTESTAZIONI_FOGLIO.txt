@@ -2,25 +2,33 @@ SCHEMA COLONNE FOGLIO "Candidature"
 ====================================
 
 Crea un Google Sheet con UNA tab chiamata "Candidature" (esatta, maiuscola C).
-Nella riga 1 incolla queste intestazioni (una per cella, da A1 a AB1).
+Nella riga 1 incolla queste intestazioni (una per cella, da A1 ad AV1).
 
 Suggerimento: copia tutta la riga sotto (sono separate da TAB) e incollala in A1:
 
-timestamp	id	nome	cognome	email	telefono	citta	posizione	q1	q2	q3	q4	q5	q6	q7	q8	q9	q10	q11	q12	q13	q14	q15	q16	relazionale	mindset	organizzazione	flessibilita	fitSettore	potenziale	overall	categoria
+timestamp	id	nome	cognome	email	telefono	citta	posizione	q1	q2	q3	q4	q5	q6	q7	q8	q9	q10	q11	q12	q13	q14	q15	q16	relazionale	mindset	organizzazione	flessibilita	fitSettore	potenziale	overall	categoria	q1_time	q2_time	q3_time	q4_time	q5_time	q6_time	q7_time	q8_time	q9_time	q10_time	q11_time	q12_time	q13_time	q14_time	q15_time	q16_time
 
 Descrizione colonne:
-- timestamp : ISO 8601 (es. 2026-05-12T11:24:00Z)
-- id        : ID univoco generato (es. c_a1b2c3)
+- timestamp   : ISO 8601 (es. 2026-05-12T11:24:00Z)
+- id          : ID univoco generato (es. c_a1b2c3)
 - nome, cognome, email, telefono, citta, posizione : dati contatto
-- q1..q16   : risposte (valori: si | incerto | no | na)
+- q1..q16     : risposte (valori: si | incerto | no | na)
 - 5 dimensioni 0-100 (relazionale, mindset, organizzazione, flessibilita, fitSettore)
-- potenziale 0-100 (media delle prime 4 dimensioni)
-- overall   0-100 (media di tutte e 5)
-- categoria : pronti | diamante | medio | non_ora
+- potenziale  0-100 (media delle prime 4 dimensioni)
+- overall     0-100 (media di tutte e 5)
+- categoria   : pronti | diamante | medio | non_ora
+- q1_time..q16_time : tempo di risposta per domanda in millisecondi (vuoto se non disponibile)
+
+Nota retrocompatibilità:
+- Le 16 colonne q*_time sono in coda apposta: i fogli già esistenti senza queste colonne
+  continuano a funzionare. Dopo l'aggiornamento del codice basta eseguire una volta
+  ensureHeaders() dall'editor Apps Script per scrivere le nuove intestazioni; le righe
+  esistenti restano com'erano e per i vecchi candidati il tempo risulterà non disponibile.
 
 Formattazione consigliata (opzionale, manuale dal foglio):
 - Riga 1: grassetto, blocco riga
 - Colonna A (timestamp): formato data
 - Colonne con q1..q16: testo
 - Colonne dimensioni e overall: numero intero
+- Colonne q*_time: numero intero (millisecondi)
 - Filtro su intera riga 1 (Dati → Crea filtro)

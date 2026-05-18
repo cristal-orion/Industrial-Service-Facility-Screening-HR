@@ -41,7 +41,7 @@ import Layout from '../layouts/Layout.astro';
             <div class="kpi"><span class="kpi-num" id="kpiPronti">0</span><span class="kpi-label">Pronti ora</span></div>
             <div class="kpi"><span class="kpi-num" id="kpiDiamanti">0</span><span class="kpi-label">Diamanti</span></div>
           </div>
-          <button id="refreshBtn" class="admin-logout" title="Ricarica candidati">
+          <button id="refreshBtn" class="admin-logout" title="Ricarica">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
           </button>
           <button id="logoutBtn" class="admin-logout" title="Esci">
@@ -50,6 +50,18 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </header>
 
+      <nav class="admin-tabs" role="tablist">
+        <button class="admin-tab active" data-view="candidates" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Candidati
+        </button>
+        <button class="admin-tab" data-view="positions" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+          Gestisci posizioni
+        </button>
+      </nav>
+
+      <div class="admin-view" id="viewCandidates">
       <div class="admin-controls">
         <div class="control-search">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -108,7 +120,90 @@ import Layout from '../layouts/Layout.astro';
           </div>
         </div>
       </div>
+      </div><!-- /viewCandidates -->
+
+      <div class="admin-view" id="viewPositions" hidden>
+        <div class="positions-toolbar">
+          <div class="positions-toolbar-info">
+            <h2>Posizioni aperte</h2>
+            <p><span id="posCount">0</span> posizioni · le posizioni <strong>attive</strong> appaiono come card sul sito principale.</p>
+          </div>
+          <button id="addPositionBtn" class="btn-primary-admin" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Nuova posizione
+          </button>
+        </div>
+
+        <div class="panel panel-positions">
+          <div class="table-wrap">
+            <table class="pos-table">
+              <thead>
+                <tr>
+                  <th>Titolo</th>
+                  <th>Location</th>
+                  <th>RAL / Contratto</th>
+                  <th>Ordine</th>
+                  <th>Stato</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="posTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div><!-- /viewPositions -->
     </section>
+
+    <!-- MODAL POSIZIONE -->
+    <div class="pos-modal" id="posModal" hidden>
+      <div class="pos-modal-backdrop" id="posModalBackdrop"></div>
+      <div class="pos-modal-panel" role="dialog" aria-modal="true">
+        <header class="pos-modal-head">
+          <h3 id="posModalTitle">Nuova posizione</h3>
+          <button class="pos-modal-close" id="posModalClose" type="button" title="Chiudi">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </header>
+        <form class="pos-form" id="posForm">
+          <input type="hidden" id="posId" />
+          <div class="pos-form-row">
+            <label for="posTitolo">Titolo *</label>
+            <input type="text" id="posTitolo" required maxlength="80" placeholder="Es. Tecnico fotovoltaico Senior" />
+          </div>
+          <div class="pos-form-row">
+            <label for="posDescrizione">Descrizione *</label>
+            <textarea id="posDescrizione" rows="3" required maxlength="240" placeholder="Una o due righe sulle responsabilità principali"></textarea>
+          </div>
+          <div class="pos-form-grid">
+            <div class="pos-form-row">
+              <label for="posRal">RAL / Contratto</label>
+              <input type="text" id="posRal" maxlength="40" placeholder="Es. € 25.000 – 35.000 oppure Da valutare" />
+            </div>
+            <div class="pos-form-row">
+              <label for="posLocation">Location</label>
+              <input type="text" id="posLocation" maxlength="40" placeholder="Es. Napoli" value="Napoli" />
+            </div>
+          </div>
+          <div class="pos-form-grid">
+            <div class="pos-form-row">
+              <label for="posOrdine">Ordine in pagina</label>
+              <input type="number" id="posOrdine" min="0" step="10" value="50" />
+            </div>
+            <div class="pos-form-row pos-form-toggle">
+              <label class="pos-toggle-label">
+                <input type="checkbox" id="posAttivo" checked />
+                <span>Attiva (visibile sul sito)</span>
+              </label>
+            </div>
+          </div>
+          <div class="pos-form-error" id="posFormError"></div>
+          <div class="pos-form-actions">
+            <button type="button" class="btn-secondary-admin" id="posCancelBtn">Annulla</button>
+            <button type="submit" class="btn-primary-admin" id="posSaveBtn">Salva</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
     <!-- DETTAGLIO -->
     <aside class="admin-detail" id="adminDetail" hidden>
@@ -854,6 +949,293 @@ import Layout from '../layouts/Layout.astro';
   .d-answer-flag[data-flag="crit"] { background: rgba(220,38,38,0.12);  color: #b91c1c; }
   .d-answer-flag[data-flag="na"]   { background: rgba(100,116,139,0.1); color: #64748b; }
 
+  /* ===== TABS ===== */
+  .admin-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 18px;
+    border-bottom: 1.5px solid var(--color-gray-200);
+  }
+  .admin-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    background: transparent;
+    border: none;
+    border-bottom: 2.5px solid transparent;
+    margin-bottom: -1.5px;
+    color: var(--color-gray-500);
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .admin-tab:hover { color: var(--color-gray-900); }
+  .admin-tab.active {
+    color: var(--color-primary, #0d9e71);
+    border-bottom-color: var(--color-primary, #0d9e71);
+  }
+  .admin-view[hidden] { display: none; }
+
+  /* ===== POSIZIONI ===== */
+  .positions-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 16px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .positions-toolbar-info h2 {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    margin: 0 0 4px;
+  }
+  .positions-toolbar-info p {
+    font-size: 0.82rem;
+    color: var(--color-gray-500);
+    margin: 0;
+  }
+  .btn-primary-admin {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--color-primary, #0d9e71);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-primary-admin:hover { background: #0a8862; }
+  .btn-primary-admin:active { transform: translateY(1px); }
+  .btn-primary-admin:disabled { opacity: 0.55; cursor: not-allowed; }
+  .btn-secondary-admin {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--color-white);
+    color: var(--color-gray-700);
+    border: 1.5px solid var(--color-gray-200);
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-secondary-admin:hover { border-color: var(--color-gray-400); background: var(--color-gray-50); }
+
+  .panel-positions { padding: 0; overflow: hidden; }
+  .pos-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  .pos-table thead th {
+    text-align: left;
+    padding: 14px 16px;
+    background: var(--color-gray-50);
+    color: var(--color-gray-500);
+    font-weight: 600;
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+  .pos-table tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--color-gray-100);
+    vertical-align: middle;
+  }
+  .pos-table tbody tr:last-child td { border-bottom: none; }
+  .pos-row-title { font-weight: 600; color: var(--color-dark); }
+  .pos-row-title-desc {
+    color: var(--color-gray-500);
+    font-size: 0.78rem;
+    font-weight: 400;
+    margin-top: 2px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .pos-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 0.74rem;
+    font-weight: 600;
+  }
+  .pos-status[data-on="true"]  { background: rgba(22,163,74,0.12); color: #15803d; }
+  .pos-status[data-on="false"] { background: rgba(100,116,139,0.12); color: #475569; }
+  .pos-status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .pos-row-actions {
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+  .pos-icon-btn {
+    width: 32px; height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--color-gray-500);
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .pos-icon-btn:hover { color: var(--color-gray-900); border-color: var(--color-gray-400); }
+  .pos-icon-btn.danger:hover { color: #b91c1c; border-color: #fca5a5; background: rgba(220,38,38,0.04); }
+  .pos-empty-row td {
+    text-align: center !important;
+    color: var(--color-gray-500);
+    padding: 36px 16px !important;
+  }
+
+  /* ===== MODAL POSIZIONE ===== */
+  .pos-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .pos-modal[hidden] { display: none; }
+  .pos-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15,23,42,0.5);
+    backdrop-filter: blur(2px);
+  }
+  .pos-modal-panel {
+    position: relative;
+    width: 100%;
+    max-width: 540px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    background: var(--color-white);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    animation: posModalIn 0.2s ease-out;
+  }
+  @keyframes posModalIn {
+    from { transform: translateY(12px); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+  }
+  .pos-modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--color-gray-100);
+  }
+  .pos-modal-head h3 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    margin: 0;
+  }
+  .pos-modal-close {
+    width: 32px; height: 32px;
+    border: none;
+    background: var(--color-gray-50);
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--color-gray-500);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pos-modal-close:hover { background: var(--color-gray-100); color: var(--color-gray-900); }
+  .pos-form { padding: 22px 24px 24px; }
+  .pos-form-row { margin-bottom: 16px; }
+  .pos-form-row label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-gray-700);
+    margin-bottom: 6px;
+  }
+  .pos-form-row input[type="text"],
+  .pos-form-row input[type="number"],
+  .pos-form-row textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--color-gray-200);
+    border-radius: 10px;
+    font-size: 0.92rem;
+    font-family: inherit;
+    color: var(--color-dark);
+    background: var(--color-white);
+    transition: border-color 0.15s;
+  }
+  .pos-form-row input:focus, .pos-form-row textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+  .pos-form-row textarea { resize: vertical; min-height: 70px; }
+  .pos-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .pos-form-grid .pos-form-row { margin-bottom: 16px; }
+  .pos-form-toggle { display: flex; align-items: flex-end; }
+  .pos-toggle-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1.5px solid var(--color-gray-200);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    color: var(--color-gray-700);
+    margin-bottom: 0 !important;
+    background: var(--color-white);
+    width: 100%;
+  }
+  .pos-toggle-label input { width: 18px; height: 18px; accent-color: var(--color-primary); }
+  .pos-form-error {
+    color: #b91c1c;
+    background: rgba(220,38,38,0.08);
+    border: 1px solid rgba(220,38,38,0.2);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    margin: 6px 0 14px;
+    display: none;
+  }
+  .pos-form-error.visible { display: block; }
+  .pos-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
   /* RESPONSIVE */
   @media (max-width: 1024px) {
     .admin-grid { grid-template-columns: 1fr; }
@@ -883,7 +1265,7 @@ import Layout from '../layouts/Layout.astro';
   // ============================================================
   // CONFIG
   // ============================================================
-  const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbw2I_65J1FG2jiI6kU9xEU2arMv-CcFXA-inAyc5upcUAZ4oZNBAa05bYxfxxUFhC6rTg/exec';
+  const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyTd7rl6ylU-UMrPJjazAl8C-apzFitLKAsU2WKUfKfD6n1-3VEuu8rLOy9mXuXXF_Pqw/exec';
   const STORAGE_KEY = 'isf_admin_token';
 
   // ============================================================
@@ -1229,6 +1611,7 @@ import Layout from '../layouts/Layout.astro';
           ...c,
           dims: c.dims || computeDimensions((c.answers || []).map(a => a.value)),
         }));
+        rebuildPositionFilter();
       } else if (data.error === 'unauthorized') {
         // token scaduto/non valido → torna a login
         sessionStorage.removeItem(STORAGE_KEY);
@@ -1245,6 +1628,14 @@ import Layout from '../layouts/Layout.astro';
     } finally {
       showLoading(false);
     }
+  }
+
+  function rebuildPositionFilter() {
+    const titles = Array.from(new Set(CANDIDATES.map(c => c.posizione).filter(Boolean))).sort();
+    const current = filterPosizione.value;
+    filterPosizione.innerHTML = '<option value="">Tutte le posizioni</option>' +
+      titles.map(t => `<option value="${escAttr(t)}">${esc(t)}</option>`).join('');
+    if (titles.includes(current)) filterPosizione.value = current;
   }
 
   function showLoading(on) {
@@ -1609,6 +2000,221 @@ import Layout from '../layouts/Layout.astro';
     svg += '</svg>';
     return svg;
   }
+
+  // ============================================================
+  // VIEW TABS (Candidati / Posizioni)
+  // ============================================================
+  const viewCandidates = document.getElementById('viewCandidates');
+  const viewPositions = document.getElementById('viewPositions');
+  const adminTabs = document.querySelectorAll('.admin-tab');
+
+  function switchView(name) {
+    adminTabs.forEach(t => t.classList.toggle('active', t.dataset.view === name));
+    viewCandidates.hidden = (name !== 'candidates');
+    viewPositions.hidden = (name !== 'positions');
+    if (name === 'positions') loadPositionsAdmin();
+  }
+  adminTabs.forEach(t => t.addEventListener('click', () => switchView(t.dataset.view)));
+
+  // ============================================================
+  // GESTIONE POSIZIONI
+  // ============================================================
+  let POSITIONS_ADMIN = [];
+  const posTbody = document.getElementById('posTbody');
+  const posCount = document.getElementById('posCount');
+  const addPositionBtn = document.getElementById('addPositionBtn');
+  const posModal = document.getElementById('posModal');
+  const posModalTitle = document.getElementById('posModalTitle');
+  const posForm = document.getElementById('posForm');
+  const posFormError = document.getElementById('posFormError');
+  const posSaveBtn = document.getElementById('posSaveBtn');
+  const posCancelBtn = document.getElementById('posCancelBtn');
+  const posModalClose = document.getElementById('posModalClose');
+  const posModalBackdrop = document.getElementById('posModalBackdrop');
+
+  async function loadPositionsAdmin() {
+    const token = getToken();
+    if (!token) return;
+    try {
+      const data = await apiCall({ action: 'list_positions_admin', token });
+      if (data && data.ok && Array.isArray(data.positions)) {
+        POSITIONS_ADMIN = data.positions;
+        renderPositionsTable();
+      } else if (data && data.error === 'unauthorized') {
+        sessionStorage.removeItem(STORAGE_KEY);
+        adminDash.hidden = true;
+        adminLogin.hidden = false;
+      } else {
+        POSITIONS_ADMIN = [];
+        renderPositionsTable();
+      }
+    } catch (err) {
+      console.error('loadPositionsAdmin error:', err);
+      POSITIONS_ADMIN = [];
+      renderPositionsTable();
+    }
+  }
+
+  function renderPositionsTable() {
+    posCount.textContent = POSITIONS_ADMIN.length;
+    if (!POSITIONS_ADMIN.length) {
+      posTbody.innerHTML = '<tr class="pos-empty-row"><td colspan="6">Nessuna posizione. Clicca "Nuova posizione" per crearne una.</td></tr>';
+      return;
+    }
+    posTbody.innerHTML = POSITIONS_ADMIN.map(p => `
+      <tr data-id="${escAttr(p.id)}">
+        <td>
+          <div class="pos-row-title">${esc(p.titolo)}</div>
+          <div class="pos-row-title-desc">${esc(p.descrizione)}</div>
+        </td>
+        <td>${esc(p.location || '—')}</td>
+        <td>${esc(p.ral || '—')}</td>
+        <td>${Number(p.ordine) || 0}</td>
+        <td><span class="pos-status" data-on="${p.attivo ? 'true' : 'false'}">${p.attivo ? 'Attiva' : 'Disattiva'}</span></td>
+        <td>
+          <div class="pos-row-actions">
+            <button class="pos-icon-btn" data-action="toggle" title="${p.attivo ? 'Disattiva' : 'Attiva'}">
+              ${p.attivo
+                ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+                : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+              }
+            </button>
+            <button class="pos-icon-btn" data-action="edit" title="Modifica">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+            <button class="pos-icon-btn danger" data-action="delete" title="Elimina">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function escAttr(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  }
+
+  posTbody.addEventListener('click', async (e) => {
+    const btn = e.target.closest('button[data-action]');
+    if (!btn) return;
+    const row = btn.closest('tr');
+    const id = row ? row.dataset.id : null;
+    if (!id) return;
+    const pos = POSITIONS_ADMIN.find(p => p.id === id);
+    if (!pos) return;
+    const action = btn.dataset.action;
+    if (action === 'edit') {
+      openPosModal(pos);
+    } else if (action === 'toggle') {
+      btn.disabled = true;
+      await savePosition({ ...pos, attivo: !pos.attivo });
+      btn.disabled = false;
+    } else if (action === 'delete') {
+      if (!confirm(`Eliminare definitivamente la posizione "${pos.titolo}"?\nQuesto la rimuoverà dal sito.`)) return;
+      btn.disabled = true;
+      await deletePosition(id);
+      btn.disabled = false;
+    }
+  });
+
+  addPositionBtn.addEventListener('click', () => openPosModal(null));
+
+  function openPosModal(pos) {
+    posFormError.classList.remove('visible');
+    posFormError.textContent = '';
+    document.getElementById('posId').value = pos ? pos.id : '';
+    document.getElementById('posTitolo').value = pos ? pos.titolo : '';
+    document.getElementById('posDescrizione').value = pos ? pos.descrizione : '';
+    document.getElementById('posRal').value = pos ? pos.ral : '';
+    document.getElementById('posLocation').value = pos ? pos.location : 'Napoli';
+    document.getElementById('posOrdine').value = pos ? pos.ordine : 50;
+    document.getElementById('posAttivo').checked = pos ? !!pos.attivo : true;
+    posModalTitle.textContent = pos ? 'Modifica posizione' : 'Nuova posizione';
+    posModal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('posTitolo').focus(), 50);
+  }
+
+  function closePosModal() {
+    posModal.hidden = true;
+    document.body.style.overflow = '';
+  }
+  posCancelBtn.addEventListener('click', closePosModal);
+  posModalClose.addEventListener('click', closePosModal);
+  posModalBackdrop.addEventListener('click', closePosModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !posModal.hidden) closePosModal();
+  });
+
+  posForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    posFormError.classList.remove('visible');
+    const position = {
+      id: document.getElementById('posId').value.trim(),
+      titolo: document.getElementById('posTitolo').value.trim(),
+      descrizione: document.getElementById('posDescrizione').value.trim(),
+      ral: document.getElementById('posRal').value.trim(),
+      location: document.getElementById('posLocation').value.trim(),
+      ordine: Number(document.getElementById('posOrdine').value) || 0,
+      attivo: document.getElementById('posAttivo').checked
+    };
+    if (!position.titolo || !position.descrizione) {
+      posFormError.textContent = 'Titolo e descrizione sono obbligatori.';
+      posFormError.classList.add('visible');
+      return;
+    }
+    posSaveBtn.disabled = true;
+    posSaveBtn.textContent = 'Salvataggio…';
+    const ok = await savePosition(position);
+    posSaveBtn.disabled = false;
+    posSaveBtn.textContent = 'Salva';
+    if (ok) closePosModal();
+    else {
+      posFormError.textContent = 'Salvataggio fallito. Riprova.';
+      posFormError.classList.add('visible');
+    }
+  });
+
+  async function savePosition(position) {
+    const token = getToken();
+    if (!token) return false;
+    try {
+      const data = await apiCall({ action: 'save_position', token, position });
+      if (data && data.ok) {
+        await loadPositionsAdmin();
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error('savePosition error:', err);
+      return false;
+    }
+  }
+
+  async function deletePosition(id) {
+    const token = getToken();
+    if (!token) return false;
+    try {
+      const data = await apiCall({ action: 'delete_position', token, id });
+      if (data && data.ok) {
+        await loadPositionsAdmin();
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error('deletePosition error:', err);
+      return false;
+    }
+  }
+
+  // se siamo sulla tab Posizioni, il refresh ricarica anche le posizioni
+  refreshBtn.addEventListener('click', () => {
+    if (!viewPositions.hidden) loadPositionsAdmin();
+  });
 
   // ============================================================
   // INIT

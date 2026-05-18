@@ -193,111 +193,12 @@ import Layout from '../layouts/Layout.astro';
         <p class="section-desc">Scegli la posizione di interesse e completa un breve questionario attitudinale. Bastano 5 minuti.</p>
       </div>
 
-      <!-- PROFILE CARDS -->
+      <!-- PROFILE CARDS (renderizzate dinamicamente) -->
       <div class="profiles-grid" id="profilesGrid">
-        <button class="profile-card reveal reveal-delay-1" data-profile="qhse">
-          <div class="card-top-accent"></div>
-          <div class="profile-meta">
-            <span class="badge badge-type">Full time</span>
-            <span class="badge badge-location">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Napoli
-            </span>
-          </div>
-          <div class="profile-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4"/><path d="M12 2a10 10 0 110 20 10 10 0 010-20z"/></svg>
-          </div>
-          <h3>QHSE Junior</h3>
-          <p>Supporto ai processi di qualità, salute, sicurezza e ambiente nel settore energia rinnovabile</p>
-          <div class="profile-footer">
-            <div class="profile-ral">
-              <span class="ral-label">RAL</span>
-              <span class="ral-value">&euro; 20.000 &ndash; 25.000</span>
-            </div>
-            <span class="profile-cta">
-              Candidati
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </span>
-          </div>
-        </button>
-
-        <button class="profile-card reveal reveal-delay-2" data-profile="gare">
-          <div class="card-top-accent"></div>
-          <div class="profile-meta">
-            <span class="badge badge-type">Full time</span>
-            <span class="badge badge-location">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Napoli
-            </span>
-          </div>
-          <div class="profile-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          </div>
-          <h3>Responsabile Ufficio Gare</h3>
-          <p>Gestione e coordinamento delle procedure di gara e appalto per progetti nel settore energetico</p>
-          <div class="profile-footer">
-            <div class="profile-ral">
-              <span class="ral-label">RAL</span>
-              <span class="ral-value">&euro; 25.000 &ndash; 35.000</span>
-            </div>
-            <span class="profile-cta">
-              Candidati
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </span>
-          </div>
-        </button>
-
-        <button class="profile-card reveal reveal-delay-3" data-profile="elettricista">
-          <div class="card-top-accent"></div>
-          <div class="profile-meta">
-            <span class="badge badge-type">Full time</span>
-            <span class="badge badge-location">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Napoli
-            </span>
-          </div>
-          <div class="profile-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          </div>
-          <h3>Elettricista Trasfertista</h3>
-          <p>Installazione e manutenzione di impianti elettrici su cantieri fotovoltaici ed eolici in trasferta</p>
-          <div class="profile-footer">
-            <div class="profile-ral">
-              <span class="ral-label">RAL</span>
-              <span class="ral-value">&euro; 20.000 &ndash; 30.000</span>
-            </div>
-            <span class="profile-cta">
-              Candidati
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </span>
-          </div>
-        </button>
-
-        <button class="profile-card reveal reveal-delay-4" data-profile="spontanea">
-          <div class="card-top-accent"></div>
-          <div class="profile-meta">
-            <span class="badge badge-type">Full time</span>
-            <span class="badge badge-location">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Napoli
-            </span>
-          </div>
-          <div class="profile-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M12 11v6"/><path d="M9 14h6"/></svg>
-          </div>
-          <h3>Candidatura spontanea</h3>
-          <p>Non hai trovato una posizione in linea con il tuo profilo? Inviaci la tua candidatura spontanea.</p>
-          <div class="profile-footer">
-            <div class="profile-ral">
-              <span class="ral-label">Contratto</span>
-              <span class="ral-value">Da valutare</span>
-            </div>
-            <span class="profile-cta">
-              Candidati
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </span>
-          </div>
-        </button>
+        <div class="profiles-loading" id="profilesLoading">
+          <div class="profiles-spinner"></div>
+          <p>Carico le posizioni aperte…</p>
+        </div>
       </div>
 
       <!-- QUESTIONNAIRE -->
@@ -871,6 +772,34 @@ import Layout from '../layouts/Layout.astro';
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 22px;
+    min-height: 220px;
+  }
+  .profiles-loading {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 40px 20px;
+    color: var(--color-gray-500);
+    font-size: 0.9rem;
+  }
+  .profiles-spinner {
+    width: 28px;
+    height: 28px;
+    border: 3px solid var(--color-gray-200);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .profiles-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--color-gray-500);
+    padding: 40px 20px;
+    font-size: 0.95rem;
   }
   .profile-card {
     position: relative;
@@ -1785,12 +1714,36 @@ import Layout from '../layouts/Layout.astro';
   // La gallery scorre in modo lineare via CSS.
 
   // ===== POSIZIONI =====
-  const POSITIONS = {
-    qhse: 'QHSE Junior',
-    gare: 'Responsabile Ufficio Gare',
-    elettricista: 'Elettricista Trasfertista',
-    spontanea: 'Candidatura spontanea'
+  // Le 4 posizioni hardcoded sono il FALLBACK se l'Apps Script non risponde:
+  // su rete OK le card vengono caricate dinamicamente dal foglio "Posizioni".
+  const FALLBACK_POSITIONS = [
+    { id: 'qhse', titolo: 'QHSE Junior',
+      descrizione: 'Supporto ai processi di qualità, salute, sicurezza e ambiente nel settore energia rinnovabile',
+      ral: '€ 20.000 – 25.000', location: 'Napoli', ordine: 10 },
+    { id: 'gare', titolo: 'Responsabile Ufficio Gare',
+      descrizione: 'Gestione e coordinamento delle procedure di gara e appalto per progetti nel settore energetico',
+      ral: '€ 25.000 – 35.000', location: 'Napoli', ordine: 20 },
+    { id: 'elettricista', titolo: 'Elettricista Trasfertista',
+      descrizione: 'Installazione e manutenzione di impianti elettrici su cantieri fotovoltaici ed eolici in trasferta',
+      ral: '€ 20.000 – 30.000', location: 'Napoli', ordine: 30 },
+    { id: 'spontanea', titolo: 'Candidatura spontanea',
+      descrizione: 'Non hai trovato una posizione in linea con il tuo profilo? Inviaci la tua candidatura spontanea.',
+      ral: 'Da valutare', location: 'Napoli', ordine: 100 }
+  ];
+
+  // Mappa id → SVG per le icone delle posizioni storiche.
+  // Le posizioni create dall'admin (id non in mappa) usano l'icona generica "briefcase".
+  const POSITION_ICONS = {
+    qhse:         '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4"/><path d="M12 2a10 10 0 110 20 10 10 0 010-20z"/></svg>',
+    gare:         '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+    elettricista: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+    spontanea:    '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M12 11v6"/><path d="M9 14h6"/></svg>',
+    _default:     '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>'
   };
+
+  // Stato dinamico: lista posizioni e mappa id→titolo (sostituisce il vecchio POSITIONS).
+  let POSITIONS_LIST = [];
+  let POSITIONS = {};
 
   // ===== QUESTIONARIO ATTITUDINALE — 16 DOMANDE =====
   // Le 4 opzioni sono identiche per tutte le domande.
@@ -1828,7 +1781,7 @@ import Layout from '../layouts/Layout.astro';
   ];
 
   // Endpoint webhook Apps Script
-  const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbw2I_65J1FG2jiI6kU9xEU2arMv-CcFXA-inAyc5upcUAZ4oZNBAa05bYxfxxUFhC6rTg/exec';
+  const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyTd7rl6ylU-UMrPJjazAl8C-apzFitLKAsU2WKUfKfD6n1-3VEuu8rLOy9mXuXXF_Pqw/exec';
 
   // ===== STATE =====
   // step -1 = intro, step 0 = contact, step 1..16 = domanda (1-based)
@@ -1861,6 +1814,94 @@ import Layout from '../layouts/Layout.astro';
     if (!card) return;
     startQuiz(card.dataset.profile);
   });
+
+  // ===== CARICAMENTO DINAMICO POSIZIONI =====
+  function ralLabel(value) {
+    // se il valore contiene cifre lo trattiamo come RAL; altrimenti "Contratto"
+    return /\d/.test(String(value || '')) ? 'RAL' : 'Contratto';
+  }
+
+  function escapeHtml(s) {
+    return String(s || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function renderProfilesGrid() {
+    if (!POSITIONS_LIST.length) {
+      profilesGrid.innerHTML = '<div class="profiles-empty">Nessuna posizione aperta al momento. Torna a trovarci presto.</div>';
+      return;
+    }
+    const html = POSITIONS_LIST.map((p, i) => {
+      const delay = Math.min(i + 1, 4); // riusa reveal-delay-1..4
+      const icon = POSITION_ICONS[p.id] || POSITION_ICONS._default;
+      const label = ralLabel(p.ral);
+      return `
+        <button class="profile-card reveal reveal-delay-${delay}" data-profile="${escapeHtml(p.id)}">
+          <div class="card-top-accent"></div>
+          <div class="profile-meta">
+            <span class="badge badge-type">Full time</span>
+            <span class="badge badge-location">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              ${escapeHtml(p.location || 'Napoli')}
+            </span>
+          </div>
+          <div class="profile-icon">${icon}</div>
+          <h3>${escapeHtml(p.titolo)}</h3>
+          <p>${escapeHtml(p.descrizione)}</p>
+          <div class="profile-footer">
+            <div class="profile-ral">
+              <span class="ral-label">${label}</span>
+              <span class="ral-value">${escapeHtml(p.ral || '—')}</span>
+            </div>
+            <span class="profile-cta">
+              Candidati
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </span>
+          </div>
+        </button>
+      `;
+    }).join('');
+    profilesGrid.innerHTML = html;
+    // riattacca animazione reveal alle nuove card
+    profilesGrid.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  }
+
+  function applyPositions(list) {
+    POSITIONS_LIST = (list || []).slice().sort((a, b) => (a.ordine - b.ordine) || a.titolo.localeCompare(b.titolo));
+    POSITIONS = {};
+    for (const p of POSITIONS_LIST) POSITIONS[p.id] = p.titolo;
+  }
+
+  async function loadPositions() {
+    let list = null;
+    if (WEBHOOK_URL) {
+      try {
+        const res = await fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'list_positions' })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.ok && Array.isArray(data.positions) && data.positions.length) {
+            list = data.positions;
+          }
+        }
+      } catch (err) {
+        console.warn('Fallback posizioni hardcoded:', err);
+      }
+    }
+    applyPositions(list || FALLBACK_POSITIONS);
+    renderProfilesGrid();
+  }
+
+  // popola subito col fallback (così select del contact step ha sempre valori),
+  // poi sovrascrive col risultato del fetch
+  applyPositions(FALLBACK_POSITIONS);
+  loadPositions();
 
   function startQuiz(positionKey) {
     selectedPosition = positionKey;
@@ -1965,8 +2006,8 @@ import Layout from '../layouts/Layout.astro';
     qHint.style.display = '';
     qOptions.classList.remove('q-options--quiz');
 
-    const positionOptions = Object.entries(POSITIONS)
-      .map(([k, v]) => `<option value="${k}" ${k === selectedPosition ? 'selected' : ''}>${v}</option>`)
+    const positionOptions = POSITIONS_LIST
+      .map(p => `<option value="${escapeAttr(p.id)}" ${p.id === selectedPosition ? 'selected' : ''}>${escapeHtml(p.titolo)}</option>`)
       .join('');
 
     qOptions.innerHTML = `

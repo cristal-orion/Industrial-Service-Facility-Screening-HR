@@ -32,3 +32,30 @@ Formattazione consigliata (opzionale, manuale dal foglio):
 - Colonne dimensioni e overall: numero intero
 - Colonne q*_time: numero intero (millisecondi)
 - Filtro su intera riga 1 (Dati → Crea filtro)
+
+
+SCHEMA SECONDA TAB "Posizioni"
+==============================
+
+Le posizioni lavorative gestite dalla dashboard admin vivono in una seconda tab
+chiamata "Posizioni" (esatta). Viene creata in automatico al primo utilizzo, ma
+se preferisci puoi crearla a mano con queste intestazioni in A1:
+
+id	attivo	titolo	descrizione	ral	location	ordine	updated_at
+
+Descrizione colonne:
+- id          : slug univoco (es. qhse, elettricista; per nuove generate p_xxxxxxxx)
+- attivo      : TRUE / FALSE — solo le attive vengono mostrate sul sito
+- titolo      : nome della posizione mostrato sulla card
+- descrizione : testo della card (1-2 righe)
+- ral         : valore mostrato in basso a destra. Se contiene cifre il label
+                visualizzato è "RAL", altrimenti "Contratto" (utile per "Da valutare")
+- location    : badge in alto a destra (es. Napoli, Italia)
+- ordine      : intero per ordinare le card crescente (10, 20, 30…)
+- updated_at  : ISO 8601, scritto automaticamente ad ogni save
+
+Bootstrap iniziale:
+1. Apri Apps Script editor.
+2. Esegui una volta la funzione seedPositions() — popola le 4 posizioni
+   correnti (qhse, gare, elettricista, spontanea) con i valori del sito attuale.
+   La funzione è idempotente: se già presenti aggiorna; altrimenti inserisce.

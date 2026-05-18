@@ -22,6 +22,8 @@
  */
 
 const SHEET_NAME = 'Candidature';
+const POSITIONS_SHEET_NAME = 'Posizioni';
+const POSITIONS_HEADERS = ['id','attivo','titolo','descrizione','ral','location','ordine','updated_at'];
 // Le colonne q*_time sono in coda per non disallineare le righe già scritte
 // prima dell'introduzione della metrica tempo (vecchie candidature compatibili).
 const HEADERS = [
@@ -63,10 +65,14 @@ function doPost(e) {
     const body = JSON.parse(e.postData.contents);
     const action = body.action || 'submit';
 
-    if (action === 'submit')          return json(handleSubmit(body));
-    if (action === 'login')           return json(handleLogin(body));
-    if (action === 'list')            return json(handleList(body));
-    if (action === 'check_duplicate') return json(handleCheckDuplicate(body));
+    if (action === 'submit')              return json(handleSubmit(body));
+    if (action === 'login')               return json(handleLogin(body));
+    if (action === 'list')                return json(handleList(body));
+    if (action === 'check_duplicate')     return json(handleCheckDuplicate(body));
+    if (action === 'list_positions')      return json(handleListPositions(body, false));
+    if (action === 'list_positions_admin')return json(handleListPositions(body, true));
+    if (action === 'save_position')       return json(handleSavePosition(body));
+    if (action === 'delete_position')     return json(handleDeletePosition(body));
 
     return json({ ok: false, error: 'unknown_action' });
   } catch (err) {
@@ -297,6 +303,133 @@ function categorize(d) {
   if (fit < 50 && pot >= 65)  return 'diamante';
   if (fit < 50 && pot < 50)   return 'non_ora';
   return 'medio';
+}
+
+// ============================================================
+// GESTIONE POSIZIONI (CRUD)
+// ============================================================
+function handleListPositions(payload, admin) {
+  if (admin) {
+    const props = PropertiesService.getScriptProperties();
+    const token = props.getProperty('ADMIN_TOKEN');
+    if (!payload.token || payload.token !== token) return { ok: false, error: 'unauthorized' };
+  }
+  const sheet = getPositionsSheet();
+  const last = sheet.getLastRow();
+  if (last < 2) return { ok: true, positions: [] };
+  const range = sheet.getRange(2, 1, last - 1, POSITIONS_HEADERS.length).getValues();
+  const out = range.map(rowToPosition).filter(p => p && p.id);
+  const filtered = admin ? out : out.filter(p => p.attivo);
+  filtered.sort((a, b) => (a.ordine - b.ordine) || a.titolo.localeCompare(b.titolo));
+  return { ok: true, positions: filtered };
+}
+
+function handleSavePosition(payload) {
+  const props = PropertiesService.getScriptProperties();
+  const token = props.getProperty('ADMIN_TOKEN');
+  if (!payload.token || payload.token !== token) return { ok: false, error: 'unauthorized' };
+
+  const p = payload.position || {};
+  const titolo = String(p.titolo || '').trim();
+  if (!titolo) return { ok: false, error: 'missing_titolo' };
+
+  const sheet = getPositionsSheet();
+  const id = String(p.id || '').trim() || 'p_' + Utilities.getUuid().slice(0, 8);
+
+  const newRow = [
+    id,
+    p.attivo === false ? false : true,
+    titolo,
+    String(p.descrizione || ''),
+    String(p.ral || ''),
+    String(p.location || ''),
+    Number(p.ordine) || 0,
+    new Date().toISOString()
+  ];
+
+  const idx = findPositionRowIndex(sheet, id);
+  if (idx > 0) {
+    sheet.getRange(idx, 1, 1, POSITIONS_HEADERS.length).setValues([newRow]);
+  } else {
+    sheet.appendRow(newRow);
+  }
+  return { ok: true, id };
+}
+
+function handleDeletePosition(payload) {
+  const props = PropertiesService.getScriptProperties();
+  const token = props.getProperty('ADMIN_TOKEN');
+  if (!payload.token || payload.token !== token) return { ok: false, error: 'unauthorized' };
+  const id = String(payload.id || '').trim();
+  if (!id) return { ok: false, error: 'missing_id' };
+  const sheet = getPositionsSheet();
+  const idx = findPositionRowIndex(sheet, id);
+  if (idx > 0) sheet.deleteRow(idx);
+  return { ok: true };
+}
+
+function rowToPosition(row) {
+  return {
+    id: String(row[0] || ''),
+    attivo: row[1] === true || String(row[1]).toUpperCase() === 'TRUE',
+    titolo: String(row[2] || ''),
+    descrizione: String(row[3] || ''),
+    ral: String(row[4] || ''),
+    location: String(row[5] || ''),
+    ordine: Number(row[6]) || 0,
+    updatedAt: row[7] instanceof Date ? row[7].toISOString() : String(row[7] || '')
+  };
+}
+
+function findPositionRowIndex(sheet, id) {
+  const last = sheet.getLastRow();
+  if (last < 2) return -1;
+  const ids = sheet.getRange(2, 1, last - 1, 1).getValues();
+  for (let i = 0; i < ids.length; i++) {
+    if (String(ids[i][0]) === id) return i + 2;
+  }
+  return -1;
+}
+
+function getPositionsSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(POSITIONS_SHEET_NAME);
+  if (!sh) {
+    sh = ss.insertSheet(POSITIONS_SHEET_NAME);
+    sh.appendRow(POSITIONS_HEADERS);
+    sh.setFrozenRows(1);
+  } else if (sh.getLastRow() === 0) {
+    sh.appendRow(POSITIONS_HEADERS);
+    sh.setFrozenRows(1);
+  }
+  return sh;
+}
+
+// Eseguila UNA VOLTA dall'editor per popolare la tab Posizioni con le 4 esistenti.
+// Idempotente: se l'id esiste già, aggiorna; altrimenti inserisce.
+function seedPositions() {
+  const seed = [
+    { id: 'qhse', attivo: true, titolo: 'QHSE Junior',
+      descrizione: 'Supporto ai processi di qualità, salute, sicurezza e ambiente nel settore energia rinnovabile',
+      ral: '€ 20.000 – 25.000', location: 'Napoli', ordine: 10 },
+    { id: 'gare', attivo: true, titolo: 'Responsabile Ufficio Gare',
+      descrizione: 'Gestione e coordinamento delle procedure di gara e appalto per progetti nel settore energetico',
+      ral: '€ 25.000 – 35.000', location: 'Napoli', ordine: 20 },
+    { id: 'elettricista', attivo: true, titolo: 'Elettricista Trasfertista',
+      descrizione: 'Installazione e manutenzione di impianti elettrici su cantieri fotovoltaici ed eolici in trasferta',
+      ral: '€ 20.000 – 30.000', location: 'Napoli', ordine: 30 },
+    { id: 'spontanea', attivo: true, titolo: 'Candidatura spontanea',
+      descrizione: 'Non hai trovato una posizione in linea con il tuo profilo? Inviaci la tua candidatura spontanea.',
+      ral: 'Da valutare', location: 'Napoli', ordine: 100 }
+  ];
+  const sheet = getPositionsSheet();
+  for (const p of seed) {
+    const idx = findPositionRowIndex(sheet, p.id);
+    const row = [p.id, p.attivo, p.titolo, p.descrizione, p.ral, p.location, p.ordine, new Date().toISOString()];
+    if (idx > 0) sheet.getRange(idx, 1, 1, POSITIONS_HEADERS.length).setValues([row]);
+    else sheet.appendRow(row);
+  }
+  Logger.log('Posizioni seeded.');
 }
 
 // ============================================================

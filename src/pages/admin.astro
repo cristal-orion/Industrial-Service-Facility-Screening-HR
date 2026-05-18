@@ -3,6 +3,20 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Dashboard HR — Industrial Service & Facility">
+  <style is:global>
+    :root {
+      --color-primary: #0d9e71;
+      --color-primary-light: #10b981;
+      --color-primary-dark: #065f46;
+      --color-primary-bg: rgba(13, 158, 113, 0.06);
+      --color-primary-bg-hover: rgba(13, 158, 113, 0.1);
+      --color-accent: #0ea5e9;
+      --color-dark: #111111;
+      --color-gray-400: #888888;
+      --color-success: #0d9e71;
+      --color-olive: #7a9e1e;
+    }
+  </style>
   <main class="admin">
     <!-- LOGIN -->
     <section class="admin-login" id="adminLogin">
@@ -1994,7 +2008,7 @@ import Layout from '../layouts/Layout.astro';
     // label
     labels.forEach((lab, i) => {
       const [x, y] = point(angles[i], 1.18);
-      svg += `<text x="${x}" y="${y + 3}" text-anchor="middle" font-size="10" font-family="Outfit, sans-serif" font-weight="600" fill="#475569">${lab}</text>`;
+      svg += `<text x="${x}" y="${y + 3}" text-anchor="middle" font-size="10" font-family="Manrope, sans-serif" font-weight="600" fill="#475569">${lab}</text>`;
     });
 
     svg += '</svg>';

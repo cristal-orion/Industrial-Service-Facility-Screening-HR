@@ -42,8 +42,8 @@ import Layout from '../layouts/Layout.astro';
           Costruisci il futuro<br/>dell'energia <span class="title-highlight">con noi - is Facility!</span>
         </h1>
         <p class="hero-sub reveal reveal-delay-2">
-          Cerchiamo professionisti con esperienza nel settore fotovoltaico, eolico e impiantistico.
-          Entra in un team che progetta, installa e mantiene gli impianti di domani.
+          Cerchiamo laureati e laureandi motivati a crescere nei settori fotovoltaico, eolico e impiantistico.
+          Entra a far parte di un team dinamico che progetta, realizza e mantiene gli impianti del futuro, contribuendo allo sviluppo di soluzioni innovative e sostenibili.
         </p>
         <div class="hero-actions reveal reveal-delay-3">
           <a href="#candidatura" class="btn btn-primary btn-lg">
@@ -77,6 +77,7 @@ import Layout from '../layouts/Layout.astro';
       <div class="section-header reveal">
         <span class="section-tag">Perché sceglierci</span>
         <h2>Un ambiente dove crescere</h2>
+        <p class="section-desc">In Service &amp; Facility, le persone non sono mai solo un numero: sono la forza che guida ogni nostro progetto. Qui, le tue competenze, la tua curiosità e il tuo talento trovano spazio per crescere e fare la differenza.</p>
       </div>
       <div class="why-visual reveal reveal-delay-1">
         <img
@@ -199,6 +200,23 @@ import Layout from '../layouts/Layout.astro';
           <div class="profiles-spinner"></div>
           <p>Carico le posizioni aperte…</p>
         </div>
+      </div>
+
+      <!-- CONTROLLI: frecce desktop / "mostra altre" mobile -->
+      <div class="profiles-controls" id="profilesControls" hidden>
+        <div class="profiles-pager" id="profilesPager">
+          <button class="profiles-pager-btn" id="profilesPrev" type="button" aria-label="Posizioni precedenti">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <span class="profiles-pager-status" id="profilesPagerStatus">1 / 1</span>
+          <button class="profiles-pager-btn" id="profilesNext" type="button" aria-label="Posizioni successive">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+        <button class="profiles-loadmore" id="profilesLoadMore" type="button">
+          Mostra altre posizioni
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
       </div>
 
       <!-- QUESTIONNAIRE -->
@@ -801,6 +819,71 @@ import Layout from '../layouts/Layout.astro';
     padding: 40px 20px;
     font-size: 0.95rem;
   }
+  .profiles-controls {
+    margin-top: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .profiles-controls[hidden] { display: none; }
+  .profiles-pager {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .profiles-pager-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-gray-200);
+    background: var(--color-white);
+    color: var(--color-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .profiles-pager-btn:hover:not(:disabled) {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-white);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  }
+  .profiles-pager-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .profiles-pager-status {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-gray-700, #334155);
+    min-width: 56px;
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+  .profiles-loadmore {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    border: 1.5px solid var(--color-primary);
+    background: var(--color-white);
+    color: var(--color-primary);
+    font-family: inherit;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+  .profiles-loadmore:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+  }
+  .profiles-loadmore:active { transform: scale(0.98); }
   .profile-card {
     position: relative;
     background: var(--color-white);
@@ -1675,6 +1758,8 @@ import Layout from '../layouts/Layout.astro';
     }
     .benefits-grid { grid-template-columns: 1fr; }
     .profiles-grid { grid-template-columns: 1fr; }
+    .profiles-pager { display: none; }
+    .profiles-loadmore { display: inline-flex; }
     .why-section, .positions-section, .gallery-section { padding: 64px 0; }
     .gallery-slide { flex-basis: calc(86vw - 48px); }
     .gallery-slide img { aspect-ratio: 3 / 2; }
@@ -1795,6 +1880,11 @@ import Layout from '../layouts/Layout.astro';
 
   // ===== DOM =====
   const profilesGrid = document.getElementById('profilesGrid');
+  const profilesControls = document.getElementById('profilesControls');
+  const profilesPrev = document.getElementById('profilesPrev');
+  const profilesNext = document.getElementById('profilesNext');
+  const profilesPagerStatus = document.getElementById('profilesPagerStatus');
+  const profilesLoadMore = document.getElementById('profilesLoadMore');
   const questionnaire = document.getElementById('questionnaire');
   const qBack = document.getElementById('qBack');
   const qProgress = document.getElementById('qProgress');
@@ -1829,45 +1919,125 @@ import Layout from '../layouts/Layout.astro';
       .replace(/"/g, '&quot;');
   }
 
+  // Paginazione/visibilità: max 6 card per pagina su desktop, "mostra altre" su mobile
+  const PROFILES_PAGE_SIZE = 6;
+  let profilesPage = 0;            // pagina corrente desktop (0-based)
+  let profilesMobileShown = PROFILES_PAGE_SIZE; // quante card visibili su mobile
+
+  function isMobileLayout() {
+    return window.matchMedia('(max-width: 768px)').matches;
+  }
+
+  function totalPages() {
+    return Math.max(1, Math.ceil(POSITIONS_LIST.length / PROFILES_PAGE_SIZE));
+  }
+
+  function cardHtml(p, i) {
+    const delay = Math.min(i + 1, 4); // riusa reveal-delay-1..4
+    const icon = POSITION_ICONS[p.id] || POSITION_ICONS._default;
+    const label = ralLabel(p.ral);
+    return `
+      <button class="profile-card reveal reveal-delay-${delay}" data-profile="${escapeHtml(p.id)}">
+        <div class="card-top-accent"></div>
+        <div class="profile-meta">
+          <span class="badge badge-type">Full time</span>
+          <span class="badge badge-location">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            ${escapeHtml(p.location || 'Napoli')}
+          </span>
+        </div>
+        <div class="profile-icon">${icon}</div>
+        <h3>${escapeHtml(p.titolo)}</h3>
+        <p>${escapeHtml(p.descrizione)}</p>
+        <div class="profile-footer">
+          <div class="profile-ral">
+            <span class="ral-label">${label}</span>
+            <span class="ral-value">${escapeHtml(p.ral || '—')}</span>
+          </div>
+          <span class="profile-cta">
+            Candidati
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </span>
+        </div>
+      </button>
+    `;
+  }
+
+  function updateProfilesControls() {
+    const total = POSITIONS_LIST.length;
+    const mobile = isMobileLayout();
+    const needsControls = total > PROFILES_PAGE_SIZE;
+
+    if (!needsControls) {
+      profilesControls.hidden = true;
+      return;
+    }
+    profilesControls.hidden = false;
+
+    // Pager desktop
+    const pages = totalPages();
+    if (profilesPage > pages - 1) profilesPage = pages - 1;
+    profilesPagerStatus.textContent = `${profilesPage + 1} / ${pages}`;
+    profilesPrev.disabled = profilesPage <= 0;
+    profilesNext.disabled = profilesPage >= pages - 1;
+
+    // Load more mobile
+    if (mobile && profilesMobileShown >= total) {
+      profilesLoadMore.style.display = 'none';
+    } else if (mobile) {
+      profilesLoadMore.style.display = '';
+    }
+  }
+
   function renderProfilesGrid() {
     if (!POSITIONS_LIST.length) {
       profilesGrid.innerHTML = '<div class="profiles-empty">Nessuna posizione aperta al momento. Torna a trovarci presto.</div>';
+      profilesControls.hidden = true;
       return;
     }
-    const html = POSITIONS_LIST.map((p, i) => {
-      const delay = Math.min(i + 1, 4); // riusa reveal-delay-1..4
-      const icon = POSITION_ICONS[p.id] || POSITION_ICONS._default;
-      const label = ralLabel(p.ral);
-      return `
-        <button class="profile-card reveal reveal-delay-${delay}" data-profile="${escapeHtml(p.id)}">
-          <div class="card-top-accent"></div>
-          <div class="profile-meta">
-            <span class="badge badge-type">Full time</span>
-            <span class="badge badge-location">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              ${escapeHtml(p.location || 'Napoli')}
-            </span>
-          </div>
-          <div class="profile-icon">${icon}</div>
-          <h3>${escapeHtml(p.titolo)}</h3>
-          <p>${escapeHtml(p.descrizione)}</p>
-          <div class="profile-footer">
-            <div class="profile-ral">
-              <span class="ral-label">${label}</span>
-              <span class="ral-value">${escapeHtml(p.ral || '—')}</span>
-            </div>
-            <span class="profile-cta">
-              Candidati
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </span>
-          </div>
-        </button>
-      `;
-    }).join('');
-    profilesGrid.innerHTML = html;
+
+    const total = POSITIONS_LIST.length;
+    let visible;
+    if (isMobileLayout()) {
+      visible = POSITIONS_LIST.slice(0, Math.min(profilesMobileShown, total));
+    } else if (total > PROFILES_PAGE_SIZE) {
+      const start = profilesPage * PROFILES_PAGE_SIZE;
+      visible = POSITIONS_LIST.slice(start, start + PROFILES_PAGE_SIZE);
+    } else {
+      visible = POSITIONS_LIST;
+    }
+
+    profilesGrid.innerHTML = visible.map((p, i) => cardHtml(p, i)).join('');
     // riattacca animazione reveal alle nuove card
     profilesGrid.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    updateProfilesControls();
   }
+
+  profilesPrev.addEventListener('click', () => {
+    if (profilesPage <= 0) return;
+    profilesPage--;
+    renderProfilesGrid();
+    profilesGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  profilesNext.addEventListener('click', () => {
+    if (profilesPage >= totalPages() - 1) return;
+    profilesPage++;
+    renderProfilesGrid();
+    profilesGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  profilesLoadMore.addEventListener('click', () => {
+    profilesMobileShown += PROFILES_PAGE_SIZE;
+    renderProfilesGrid();
+  });
+
+  // Se l'utente ridimensiona tra mobile/desktop ri-renderizzo per coerenza
+  let _profilesResizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(_profilesResizeTimer);
+    _profilesResizeTimer = setTimeout(() => {
+      if (POSITIONS_LIST.length > PROFILES_PAGE_SIZE) renderProfilesGrid();
+    }, 150);
+  });
 
   function applyPositions(list) {
     POSITIONS_LIST = (list || []).slice().sort((a, b) => (a.ordine - b.ordine) || a.titolo.localeCompare(b.titolo));
